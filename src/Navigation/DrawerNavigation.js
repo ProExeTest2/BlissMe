@@ -23,8 +23,8 @@ const DrawerNavigation = () => {
             drawerActiveBackgroundColor: false,
         }}
         >
-            <Drawer.Screen name='BottomTabNavigation' component={BottomTabNavigation} />
-            <Drawer.Screen name='Home' component={Home} />
+            <Drawer.Screen name='Homes' component={BottomTabNavigation} />
+            {/* <Drawer.Screen name='Home' component={Home} /> */}
             <Drawer.Screen name='TopSalon' component={TopSalon} />
 
         </Drawer.Navigator>

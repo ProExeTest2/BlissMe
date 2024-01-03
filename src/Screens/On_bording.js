@@ -1,204 +1,164 @@
-// import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-// import React from 'react'
-// import { Images } from '../assets/images';
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
+import AuthButton from '../components/AuthComponents/AuthButton';
+import BackBtn from '../components/AuthComponents/BackBtn';
+import {FlatList} from 'react-native';
+import {Services} from '../../assets/constants/ConstantData';
+import {fontSize, wp, hp} from '../../utils/globalFunction';
+import colors from '../../utils/colors';
 
-// const Onbording = ({navigation}) => {
-//   return (
-//     <View style={styles.main}>
-//       <View style={styles.header}>
-//         <View>
-//           <TouchableOpacity onPress={() => {navigation.navigate('Login')}}>
-//             <Image
-//               name="arrow"
-//               source={Images.backarrow}
-//               style={styles.arrow}
-//             />
-//           </TouchableOpacity>
-//         </View>
-//         <View style={styles.headertxtview}>
-//           <Text style={styles.headertxt}>Choose your Interests</Text>
-//         </View>
-//       </View>
-//       <View style={styles.icons_l1}>
-//         <TouchableOpacity>
-//           <View style={styles.icons}>
-//             <View>
-//               <Image
-//                 name="beautypluse"
-//                 source={Images.beauty_pluse}
-//                 style={styles.beautypluse}
-//               />
-//               <Image
-//                 name="beautypluse"
-//                 source={Images.beauty}
-//                 style={styles.beauty}
-//               />
-//             </View>
-//           </View>
-//         </TouchableOpacity>
-//         <TouchableOpacity>
-//           <View style={styles.icons}>
-//             <Image
-//               name="facewash"
-//               source={Images.facewash}
-//               style={styles.facewash}
-//             />
-//           </View>
-//         </TouchableOpacity>
-//         <TouchableOpacity>
-//           <View style={styles.icons}>
-//             <Image
-//               name="facemasage"
-//               source={Images.facemassage}
-//               style={styles.facewash}
-//             />
-//           </View>
-//         </TouchableOpacity>
-//       </View>
+const Onbording = ({navigation}) => {
+  const [interestList, setInterestList] = useState(Services);
 
-//       <View style={styles.icons_l2}>
-//         <TouchableOpacity>
-//           <View style={styles.icons}>
-//             <Image
-//               name="legmassage"
-//               source={Images.legmassage}
-//               style={styles.legmassage}
-//             />
-//           </View>
-//         </TouchableOpacity>
-//         <TouchableOpacity>
-//           <View style={styles.icons}>
-//             <Image
-//               name="faceglow"
-//               source={Images.faceglow}
-//               style={styles.faceglow}
-//             />
-//           </View>
-//         </TouchableOpacity>
-//       </View>
-
-//       <View style={styles.skip}>
-//         <TouchableOpacity onPress={()=>{navigation.navigate('Flatlist');}}>
-//           <Text style={styles.skiptxt}>Skip Now</Text>
-//         </TouchableOpacity>
-//       </View>
-//       <View style={styles.continue}>
-//         <TouchableOpacity onPress={()=>{navigation.navigate('Home');}}>
-//           <Text style={styles.continuetxt}>Continue</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
-//   );
-// }
-
-// export default Onbording
-
-// const styles = StyleSheet.create({
-//   main: {
-//     flex: 1,
-//   },
-//   header: {
-//     flexDirection: 'row',
-//     marginTop: '3%',
-//     marginLeft: '3%',
-//   },
-//   arrow: {
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     height: 20,
-//     width: 10,
-//   },
-//   headertxtview: {
-//     alignSelf: 'center',
-//     marginLeft: '20%',
-//   },
-//   headertxt: {
-//     color: 'black',
-//     fontSize: 20,
-//     fontWeight: '500',
-//     alignSelf: 'center',
-//   },
-//   icons_l1: {
-//     flexDirection: 'row',
-//     marginTop: '10%',
-//   },
-//   icons: {
-//     borderWidth: 1,
-//     marginHorizontal: 10,
-//     height: 80,
-//     width: 110,
-//   },
-//   beautypluse: {
-//     height: 20,
-//     width: 70,
-//     marginHorizontal: '15%',
-//     marginTop: '7%',
-//   },
-//   beauty: {
-//     marginLeft: '15%',
-//     marginTop: '5%',
-//     height: 35,
-//     width: 70,
-//   },
-//   facewash: {
-//     alignSelf: 'center',
-//     marginVertical: '7%',
-//     height: 65,
-//     width: 65,
-//   },
-//   icons_l2: {
-//     flexDirection: 'row',
-//     marginTop: '10%',
-//   },
-//   legmassage: {
-//     alignSelf: 'center',
-//     marginVertical: '7%',
-//     height: 65,
-//     width: 65,
-//   },
-//   faceglow: {
-//     alignSelf: 'center',
-//     marginVertical: '7%',
-//     height: 65,
-//     width: 65,
-//   },
-//   skip: {
-//     // alignItems: 'center',
-//     borderBottomWidth: 1,
-//     position: 'absolute',
-//     bottom: '10%',
-//     alignSelf: 'center',
-//   },
-//   skiptxt: {
-//     fontSize: 15,
-//   },
-//   continue: {
-//     backgroundColor: '#1D1B44',
-//     marginHorizontal: '20%',
-//     height: 35,
-//     width: '100%',
-//     borderRadius: 3,
-//     position: 'absolute',
-//     bottom: '3%',
-//     alignSelf: 'center',
-//   },
-//   continuetxt: {
-//     color: 'white',
-//     alignSelf: 'center',
-//     fontSize: 20,
-//     padding: 2,
-//   },
-// });
-
-import { View, Text } from 'react-native'
-import React from 'react'
-
-const On_bording = () => {
   return (
-    <View>
-      <Text>On_bording</Text>
-    </View>
-  )
-}
+    <SafeAreaView style={styles.main}>
+      <View style={styles.header}>
+        <View style={styles.headertxtview}>
+          <Text style={styles.headertxt}>Choose your Interests</Text>
+          <View style={styles.backBtn}>
+            <BackBtn screen={'Login'} />
+          </View>
+        </View>
+      </View>
 
-export default On_bording
+      <FlatList
+        numColumns={3}
+        data={interestList}
+        contentContainerStyle={{
+          alignSelf: 'center',
+          marginTop: 20,
+          // marginHorizontal:50
+        }}
+        renderItem={({item}) => {
+          return (
+            <View style={{marginHorizontal: 0}}>
+              <TouchableOpacity
+                style={[styles.unSelectedIconView, {borderColor: item?.selected ? colors.dark_blue : colors.gray}]}
+                onPress={() => {
+                  console.log('selected---->>', item);
+                  let temp = interestList.map(obj => {
+                    console.log('obj--------->>', obj);
+                    if (obj?.id === item?.id) {
+                      return {...obj, selected: !obj?.selected};
+                    }
+                    else{
+                      // return{...obj,selected:false}
+                      return obj;
+                    }
+                  });
+                  setInterestList(temp);
+                }}>
+                <Image source={item.src} style={[styles.icons,{tintColor: item?.selected ? colors.dark_blue : 'grey'}]} />
+              </TouchableOpacity>
+
+
+
+
+
+
+
+
+
+              
+              {/* <TouchableOpacity
+                style={[styles.unSelectedIconView, {borderColor: item?.selected ? colors.dark_blue : 'grey'}]}
+                onPress={() => {
+                  console.log('selected:::--------->>', item);
+                  let temp = interestList.map(obj => {
+                    console.log('obj--------->>', obj);
+                    if (obj?.id === item?.id) {
+                      return {...obj, selected: !obj?.selected};
+                    }
+                      return obj;
+                  });
+                  setInterestList(temp);
+                }}>
+                <Image source={item.src} style={[styles.icons,{tintColor: item?.selected ? colors.dark_blue : 'grey'}]} />
+              </TouchableOpacity>               */}
+            </View>
+          );
+        }}
+        />
+
+      <View style={styles.skip}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Flatlist');
+          }}>
+          <Text style={styles.skiptxt}>Skip Now</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.Btn}>
+        <AuthButton
+          data={'Continue'}
+          onPress={() => {
+            navigation.navigate('DrawerNavigation');
+          }}
+          style={styles.Btn}
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default Onbording;
+
+const styles = StyleSheet.create({
+  main: {
+    flex: 1,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: hp(3),
+  },
+  backBtn:{
+    position:'absolute',
+    justifyContent:'center',
+    marginLeft:wp(5)
+  },
+  headertxtview: {
+    width: wp(100),
+  },
+  headertxt: {
+    color: 'black',
+    fontSize: 20,
+    fontWeight: '500',
+    alignSelf: 'center',
+  },
+  icons: {
+    height: 60,
+    width: 60,
+    tintColor: 'grey',
+  },
+  unSelectedIconView: {
+    borderWidth: 1,
+    borderRadius: 3,
+    width: wp(30),
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: wp(4),
+    paddingVertical: hp(1),
+    marginVertical: hp(1),
+    marginHorizontal: wp(1),
+  },
+  skip: {
+    borderBottomWidth: 1,
+    position: 'absolute',
+    bottom: '10%',
+    alignSelf: 'center',
+  },
+  skiptxt: {
+    fontSize: 15,
+  },
+  Btn: {
+    paddingBottom: hp(3),
+  },
+});

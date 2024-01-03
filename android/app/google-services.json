@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "124798003309",
+    "project_id": "blissmedemo",
+    "storage_bucket": "blissmedemo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124798003309:android:7ce5ec1f9bc73ce6077764",
+        "android_client_info": {
+          "package_name": "com.blissme"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "124798003309-enr7t1kfjsnbjvqomg7a3cgd0d3fticq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blissme",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "124798003309-n0ooedufll1ltsufe4jr63n1pl3tvtb0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFPl1b9Wgf1_PPT9YgW3uSql-6fg41oHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124798003309-n0ooedufll1ltsufe4jr63n1pl3tvtb0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

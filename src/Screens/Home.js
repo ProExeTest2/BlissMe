@@ -1,218 +1,173 @@
+import React, {useState} from 'react';
 import {
-  Dimensions,
   FlatList,
   Image,
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  BackHandler,
 } from 'react-native';
-import React, {useState} from 'react';
-import Header from '../components/header';
+import Swiper from 'react-native-swiper';
 
-import colors from '../assets/constants/colors';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {Images} from '../assets/images/index';
 import {
+  Poster,
   Salon,
   Services,
   images,
   products,
-} from '../assets/constants/ConstantData';
-import {SwiperFlatList} from 'react-native-swiper-flatlist';
+  FaceMassage,
+} from '../../assets/constants/ConstantData';
+import colors from '../../utils/colors';
+import Header from '../components/common/Header';
+import {fontSize, hp, wp} from '../../utils/globalFunction';
+import {Images} from '../../assets/images/index';
+import ServiceList from '../components/common/ServiceList';
+import { CommonStrings } from '../../utils/CommonStrings';
+import {useNavigation} from '@react-navigation/native'
+import Rating from '../components/common/Rating';
+import PrimaryButton from '../components/common/PrimaryButton';
 
-const width = Dimensions.get('window').width
-
-const Home = ({navigation}) => {
+const Home = () => {
   const [state, setstate] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const navigation = useNavigation()
+
+ 
   return (
     <View style={styles.main}>
-      <View style={styles.header}>
-        <Header data={'Home'} />
-      </View>
+      {state ? (
+        <View style={styles.header}>
+          <Header data={'Home'} />
+        </View>
+      ) : (
+        <View style={styles.header}>
+          <Header data={'Top Salon '} />
+        </View>
+      )}
 
       {state ? (
-        <ScrollView
-          style={styles.ScrollView}
-          showsVerticalScrollIndicator={false}>
-          <View style={styles.mainContant}>
-            <View style={styles.locationView}>
-              <View style={styles.locationImgView}>
-                <Image
-                  name="locationPin"
-                  source={Images.location_pink_pin}
-                  style={styles.Img}
-                />
-              </View>
-              <View style={styles.locationTxtView}>
-                <Text style={styles.locationTxt}>Mong Kok Flower Market</Text>
-              </View>
-            </View>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={styles.locationView}>
+            <Image source={Images.location_pink_pin} style={styles.Img} />
+            <Text style={styles.locationTxt}>{CommonStrings.location}</Text>
           </View>
-
-          {/* <View style={styles.posterView}>
-            <View>
-              <Image name="poster" source={Images.spa} style={styles.poster} />
-            </View>
-            <View style={styles.postertxtview}>
-              <Text style={styles.postertxt}>
-                Get <Text style={styles.pr}>10%</Text>
-              </Text>
-              <Text style={styles.postertxt}> Discount for Sap</Text>
-            </View>
-            <View style={styles.poster_option}>
-              <Image name="pics" source={Images.pink_dot} style={styles.dots} />
-              <Image name="pics" source={Images.dot} style={styles.dots} />
-              <Image name="pics" source={Images.dot} style={styles.dots} />
-            </View>
-          </View> */}
-          <View style={styles.container}>
-            <SwiperFlatList
-              autoplay
-              autoplayLoop
-              // pagingEnabled={false}
-              showPagination={true}
-              data={products}
-              renderItem={({item}) => {
+          <View style={styles.swiper}>
+            <Swiper
+              pagingEnabled
+              showsPagination
+              activeDotColor={colors.pink}
+              dotColor={colors.white}
+              activeDotStyle={styles.activeDotStyle}
+              dotStyle={styles.normalDotStyle}
+              style={styles.swiperStyle}
+              loop={true}
+              autoplay={true}>
+              {Poster.map(item => {
                 return (
+                  <>
+                  <View style={styles.swiperImgView}>
                     <Image
                       source={item.src}
-                      style={{height: 200,width:width*0.98,}}
-                      resizeMode='cover'
+                      style={styles.swiperImg}
+                      resizeMode="cover"
                     />
+                    </View>
+                    <View style={styles.posterTxtView}>
+                      <Text style={styles.posterNormalTxt}>
+                        {CommonStrings.get}
+                        <Text style={styles.posterPR}>{item.discountPR}</Text>
+                      </Text>
+                      <Text style={styles.posterNormalTxt}>
+                        {CommonStrings.discountFor}{' '}
+                        <Text style={styles.posterNormalTxt}>{item.name}</Text>
+                      </Text>
+                    </View>
+                  </>
                 );
-              }}
-            />
+              })}
+            </Swiper>
           </View>
-          <View style={styles.topsalonview}>
-            <View>
-              <Text style={styles.topsalontxt}>Top Salon</Text>
-            </View>
+
+          <View style={styles.top_services_view}>
+            <Text style={styles.topsalontxt}>{CommonStrings.topSalon}</Text>
             <TouchableOpacity
               onPress={() => {
-                navigation.navigate('TopSalon');
+                setstate(false);
               }}>
-              <View>
-                <Text style={styles.viewall}>View All</Text>
-              </View>
+              <Text style={styles.viewall}>{CommonStrings.viewAll}</Text>
             </TouchableOpacity>
           </View>
 
-          <View style={{marginHorizontal: -5}}>
+
+
+
+
+          <View style={styles.flatListView}>
             <FlatList
               horizontal={true}
               showsHorizontalScrollIndicator={false}
               data={Salon}
               renderItem={({item}) => {
                 return (
-                  <TouchableOpacity style={{}}>
-                    <View
-                      style={{
-                        backgroundColor: 'pink',
-                        backgroundColor: 'white',
-                        height: 200,
-                        width: 187,
-                        justifyContent: 'space-between',
-                        marginHorizontal: 5,
-                      }}>
+    
+                <View style={{overflow:"hidden",marginHorizontal: wp(2),}}>
+                  <TouchableOpacity
+                    style={styles.salonListView}
+                    onPress={() => {
+                      navigation.navigate('SalonDetails');
+                    }}>
+                    <Image source={item.src} style={styles.salonListImg} />
+                    <Rating img={item.str} txt={item.rating} style={{bottom: hp(11.5),left: wp(2)}} />
+
+
+                    <Text style={styles.salonNameTxt}>{item.name}</Text>
+                    <View style={styles.salonLocationView}>
                       <Image
-                        source={item.src}
-                        style={{height: '55%', width: 187, resizeMode: 'cover'}}
+                        source={item.pin}
+                        style={styles.salonLocationPin}
                       />
-                      <View
-                        style={{
-                          backgroundColor: colors.pink,
-                          flexDirection: 'row',
-                          borderRadius: 20,
-                          width: 50,
-                          position: 'absolute',
-                          bottom: '50%',
-                          left: '5%',
-                        }}>
-                        <Image
-                          source={item.str}
-                          style={{height: 12, width: 12, marginLeft: '5%'}}
-                        />
-                        <Text
-                          style={{
-                            color: colors.white,
-                            fontSize: 11,
-                            fontWeight: '500',
-                            marginLeft: '10%',
-                          }}>
-                          {item.rating}
-                        </Text>
-                      </View>
-                      <Text
-                        style={{
-                          color: colors.black,
-                          position: 'absolute',
-                          top: '60%',
-                          left: '2%',
-                          fontSize: 15,
-                          fontWeight: '500',
-                        }}>
-                        {item.name}
-                      </Text>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          bottom: '5%',
-                          left: '2%',
-                        }}>
-                        <Image
-                          source={item.pin}
-                          style={{height: 15, width: 15}}
-                        />
-                        <Text style={{fontSize: 12, fontWeight: '500'}}>
-                          {item.km}
-                        </Text>
-                      </View>
+                      <Text style={styles.salonLocationTxt}>{item.km}</Text>
                     </View>
                   </TouchableOpacity>
+                  </View>
                 );
               }}
             />
           </View>
+          <View style={styles.top_services_view}>
+            <Text style={styles.top_services_txt}>{CommonStrings.topService}</Text>
+            <TouchableOpacity>
+              <Text style={styles.viewall}>{CommonStrings.viewAll}</Text>
+            </TouchableOpacity>
+          </View>
 
-          <View style={styles.services_view}>
-            <View style={styles.top_services_view}>
-              <View>
-                <Text style={styles.top_services_txt}>Top Services</Text>
-              </View>
-              <View>
-                <TouchableOpacity>
-                  <Text style={styles.viewall}>View All</Text>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={Services}
+            renderItem={({item}) => {
+              return (
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate(item?.screen);
+                  }}>
+                    <View style={styles.icon_view}>
+                      <Image
+                        name="services"
+                        source={item.src}
+                        style={styles.icons}
+                      />
+                    </View>
+                    <Text style={styles.icon_name}>{item.name}</Text>
+                    <Text style={styles.place}>{item.place} {CommonStrings.palce}</Text>
                 </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-
-          <View style={styles.Services}>
-            <FlatList
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              data={Services}
-              renderItem={({item}) => {
-                return (
-                  <TouchableOpacity>
-                    <View style={{paddingBottom: 5}}>
-                      <View style={styles.icon_view}>
-                        <Image
-                          name="services"
-                          source={item.src}
-                          style={styles.icons}
-                        />
-                      </View>
-                      <Text style={styles.icon_name}>{item.name}</Text>
-                      <Text style={styles.place}>{item.place} place</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              }}
-            />
-          </View>
+              );
+            }}
+          />
 
           <View style={styles.discounts}>
             <FlatList
@@ -221,151 +176,118 @@ const Home = ({navigation}) => {
               data={images}
               renderItem={({item}) => {
                 return (
-                  <View style={styles.discountView}>
-                    <View style={styles.discount_img_View}>
-                      <Image
-                        name="discount"
-                        source={item.src}
-                        style={styles.discount_img}
-                      />
+                  <View>
+                      <ImageBackground source={item.src} style={styles.discount_img} />
+                    <View style={styles.productImgView}>
                     </View>
                     <View style={styles.discountTxtView}>
+                      <Text style={styles.dicountTxtPR}>{item.discountPR}</Text>
                       <Text style={styles.dicountTxt}>
-                        {' '}
-                        Get{' '}
-                        <Text style={styles.dicountTxtPR}>
-                          {' '}
-                          {item.discountPR}{' '}
-                        </Text>{' '}
-                      </Text>
-                      <Text style={styles.dicountTxt}>
-                        Discount for
+                        {CommonStrings.discountFor}
                         <Text style={styles.dicountTxt}> {item.name}</Text>
                       </Text>
                     </View>
-                    <View style={styles.buybtn}>
-                      <TouchableOpacity>
-                        <Text style={styles.buytxt}>Buy now</Text>
-                      </TouchableOpacity>
-                    </View>
+
+                    <PrimaryButton txt={CommonStrings.buyNow} style={styles.primaryBtn} />
                   </View>
                 );
               }}
             />
           </View>
 
-          <View style={styles.ourProduct_view}>
-            <Text style={styles.ourProduct_txt}>Our Product</Text>
-          </View>
-          <View>
+          <Text style={styles.ourProduct_txt}>{CommonStrings.ourProduct}</Text>
+          <View style={styles.productsView}>
             <FlatList
               horizontal={true}
               data={products}
               showsHorizontalScrollIndicator={false}
               renderItem={({item}) => {
                 return (
-                  <View style={styles.productsView}>
+                  <TouchableOpacity>
                     <Image source={item.src} style={styles.productImg} />
-                    <View>
-                      <Text style={styles.product_txt}>{item.name}</Text>
-                    </View>
-                  </View>
+                    <Text style={styles.product_txt}>{item.name}</Text>
+                  </TouchableOpacity>
                 );
               }}
             />
           </View>
         </ScrollView>
       ) : (
-        // null
+        <View style={styles.main}>
+          <View style={styles.locationView}>
+            <Image
+              name="locationPin"
+              source={Images.location_pink_pin}
+              style={styles.Img}
+            />
+            <Text style={styles.locationTxt}>{CommonStrings.location}</Text>
+          </View>
+          <View style={styles.swiper}>
+            <Swiper
+              pagingEnabled
+              showsPagination
+              activeDotColor={colors.pink}
+              dotColor={colors.white}
+              activeDotStyle={styles.activeDotStyle}
+              dotStyle={styles.normalDotStyle}
+              style={styles.swiperStyle}
+              loop={true}
+              autoplay={true}>
+              {Salon.map(item => {
+                return (
+                  <>
+                  <View style={styles.swiperImgView}>
 
-        <View>
-          <View style={styles.mainContant}>
-            <View style={styles.locationView}>
-              <View style={styles.locationImgView}>
-                <Image
-                  name="locationPin"
-                  source={Images.location_pink_pin}
-                  style={styles.Img}
-                />
-              </View>
-              <View style={styles.locationTxtView}>
-                <Text style={styles.locationTxt}>Mong Kok Flower Market</Text>
-              </View>
-            </View>
+                  <Image
+                    source={item.src}
+                    style={styles.swiperImg}
+                    resizeMode="cover"
+                  />
+                  </View>
+                  <View style={styles.posterTxtView}>
+                  <Text style={styles.posterNormalTxt}>
+                    {CommonStrings.get}{}
+                    <Text style={styles.posterPR}>{CommonStrings.PR}</Text>
+                  </Text>
+                  <Text style={styles.posterNormalTxt}>
+                    {CommonStrings.discountFor}
+                    <Text style={styles.posterNormalTxt}> {CommonStrings.salon}</Text>
+                  </Text>
+                </View>
+                </>
+                )
+              })}
+            </Swiper>
           </View>
-          <View style={styles.posterView}>
-            <View>
-              <Image
-                name="poster"
-                source={Images.salonPoster}
-                style={styles.poster}
-              />
-            </View>
-            <View style={styles.postertxtview}>
-              <Text style={styles.postertxt}>
-                Get <Text style={styles.pr}>2%</Text>
-              </Text>
-              <Text style={styles.postertxt}> Discount for Salon</Text>
-            </View>
-            <View style={styles.poster_option}>
-              <Image name="pics" source={Images.pink_dot} style={styles.dots} />
-              <Image name="pics" source={Images.dot} style={styles.dots} />
-              <Image name="pics" source={Images.dot} style={styles.dots} />
-            </View>
-          </View>
-          <View>
+
+          <View style={styles.servicesView}>
             <FlatList
               data={Services}
               horizontal={true}
               showsHorizontalScrollIndicator={false}
-              renderItem={({item}) => {
+              contentContainerStyle={styles.servicesList}
+              renderItem={({item, index}) => {
                 return (
-                  <View>
-                    <TouchableOpacity style={stylo.servicesList}>
-                      {/* <TouchableOpacity style={[stylo.servicesList,{backgroundColor:item?.selected?'red':'green'}]}> */}
-                      <Text style={stylo.servicesTxt}>{item.name}</Text>
-                      {/* </TouchableOpacity>  */}
-                    </TouchableOpacity>
-                  </View>
+                  <TouchableOpacity
+                    style={ currentIndex===index?styles.slectedServicesContainer:styles.unSelectedServicesContainer}
+                    onPress={() => {
+                      setCurrentIndex(index);
+                    }}>
+                    <Text style={currentIndex===index? styles.selectedServicesListTxt:styles.unSelectedServicesListTxt}>{item.name}</Text>
+                  </TouchableOpacity>
                 );
               }}
             />
           </View>
-
-          <View style={{alignSelf: 'flex-end'}}>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                // backgroundColor: 'red',
-              }}>
-              <Text style={{fontSize: 15, fontWeight: '500'}}>Filter</Text>
-              <Image
-                name="filter"
-                source={Images.filter}
-                style={{resizeMode: 'contain', height: 25}}
-              />
-            </TouchableOpacity>
-          </View>
-          <Text style={stylo.TopSalonTxt}>Top Salon</Text>
-
-          <View>
-            <FlatList
-              data={Salon}
-              renderItem={({item}) => {
-                return (
-                  <View>
-                    <View style={stylo.flatlist}>
-                      <Image source={item.src} />
-                    </View>
-                  </View>
-                );
-              }}
-            />
-          </View>
+          <TouchableOpacity style={styles.filterContainer}>
+            <Text style={styles.filterTxt}>{CommonStrings.filter}</Text>
+            <Image source={Images.filter} style={styles.filterImg} />
+          </TouchableOpacity>
+          <Text style={styles.TopSalonTxt}>{CommonStrings.topSalon}</Text>
+          <ServiceList data={currentIndex % 2 === 0 ? Salon : FaceMassage} />
         </View>
       )}
+      
     </View>
   );
 };
@@ -373,174 +295,58 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
-    marginHorizontal: 10,
+    backgroundColor: colors.white,
   },
-  mainContant: {},
   locationView: {
     flexDirection: 'row',
-    // backgroundColor: 'yellow',
-    height: 40,
-  },
-  locationImgView: {
-    marginHorizontal: '5%',
+    height: hp(5),
+    marginHorizontal: wp(2),
   },
   Img: {
-    height: 30,
-    width: 25,
+    height: hp(3),
+    width: wp(4),
+    marginHorizontal: wp(2),
   },
-  locationTxtView: {},
   locationTxt: {
-    color: 'black',
-    fontSize: 20,
+    color: colors.black,
+    fontSize: fontSize(20),
     fontWeight: '500',
-  },
-  ScrollView: {
-    // height: '100%',
-    // width: '100%',
-  },
-  posterView: {},
-  poster: {
-    height: 200,
-    width: '100%',
-    borderRadius: 5,
-  },
-  postertxtview: {
-    position: 'absolute',
-    alignSelf: 'center',
-    marginVertical: 70,
-  },
-  postertxt: {
-    fontSize: 20,
-    color: 'white',
-    fontWeight: '500',
-  },
-  pr: {
-    color: colors.pink,
-    fontSize: 50,
-    fontWeight: '900',
-  },
-  poster_option: {
-    flexDirection: 'row',
-    position: 'absolute',
-    alignSelf: 'center',
-    bottom: 5,
-    justifyContent: 'space-between',
-  },
-  dots: {
-    height: 5,
-    width: 5,
-    marginLeft: 5,
-  },
-  container: { flex: 1, },
-  topsalonview: {
-    marginHorizontal: '2%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: '5%',
   },
   topsalontxt: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: fontSize(20),
     fontWeight: '500',
   },
   viewall: {
     color: colors.black,
-    fontSize: 15,
-    marginTop: 3,
-  },
-  salons: {
-    height: 130,
-    width: '100%',
-  },
-  salonMainView: {
-    // justifyContent:'space-between',
-  },
-  flatlistview: {
-    // marginVertical: 10,
-    // backgroundColor: 'green',
-    // borderRadius: 5,
-    // width: '50%',
-    // height: 205,
-    // shadowColor: '#000',
-    // shadowOffset: {width: 1, height: 1},
-    // shadowOpacity: 0.4,
-    // shadowRadius: 3,
-    // elevation: 4,
-    width: 200,
-    height: 300,
-    backgroundColor: 'green',
-  },
-  ratingview: {
-    flexDirection: 'row',
-    height: 15,
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
-    width: 50,
-    backgroundColor: colors.pink,
-    borderRadius: 20,
-    alignItems: 'center',
-  },
-  ratingtxt: {
-    color: colors.white,
-    fontSize: 11,
-    marginLeft: '5%',
-  },
-  salonsname: {},
-  flatlisttxt: {
-    textAlign: 'left',
-    marginLeft: 7,
-    fontSize: 15,
-    width: 180,
+    fontSize: fontSize(13),
     fontWeight: '500',
-    color: colors.black,
-  },
-  star: {
-    height: 12,
-    width: 12,
-    marginLeft: '15%',
-  },
-  pinview: {
-    position: 'absolute',
-    flexDirection: 'row',
-    bottom: 7,
-    left: 7,
-  },
-  pin: {
-    height: 15,
-    width: 15,
-  },
-  km: {
-    color: colors.black,
-    fontSize: 12,
-    marginLeft: 3,
-    fontWeight: '500',
-  },
-  services_view: {
-    marginHorizontal: '2%',
+    marginVertical: hp(1),
   },
   top_services_view: {
+    marginHorizontal: wp(2),
     justifyContent: 'space-between',
     flexDirection: 'row',
-    marginVertical: '5%',
+    marginVertical: hp(1),
   },
   top_services_txt: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: fontSize(20),
     fontWeight: '500',
   },
   icon_view: {
-    height: 70,
-    width: 120,
-    marginHorizontal: 5,
+    justifyContent: 'center',
+    height: hp(8),
+    width: wp(30),
+    marginHorizontal: wp(2),
     borderWidth: 1,
     borderRadius: 5,
+    borderColor:colors.gray
   },
   icons: {
     alignSelf: 'center',
-    marginTop: '7%',
-    width: 40,
-    height: 40,
+    width: wp(11),
+    height: hp(5),
   },
   icon_name: {
     color: colors.dark_blue,
@@ -554,113 +360,262 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontWeight: '500',
   },
-  discountView: {},
   discounts: {
-    marginTop: 50,
+    marginTop: hp(5),
+    marginHorizontal: wp(2),
   },
-  discount_img_View: {},
+  productImgView:{
+    width: wp(80),
+    height: hp(18),
+    marginHorizontal: wp(1),
+    position:'absolute',
+    backgroundColor:colors.black,
+    opacity:0.5
+  },
   discount_img: {
-    width: 310,
-    height: 150,
-    marginRight: 12,
+    width: wp(80),
+    height: hp(18),
+    marginHorizontal: wp(1),
   },
   discountTxtView: {
     position: 'absolute',
-    marginLeft: '3%',
-    marginTop: '5%',
+    marginLeft: wp(3),
+    marginTop: hp(2),
   },
   dicountTxt: {
     color: colors.white,
     textAlign: 'left',
-    fontSize: 20,
+    fontSize: fontSize(20),
     fontWeight: '500',
+    left: wp(1),
   },
   dicountTxtPR: {
     color: colors.pink,
-    fontSize: 50,
+    fontSize: fontSize(50),
     fontWeight: '900',
+    left: wp(1),
   },
-  buybtn: {
-    position: 'absolute',
-    backgroundColor: colors.pink,
-    width: 100,
-    height: 25,
+  primaryBtn:{
+    width: wp(22),
+    height: hp(3),
     borderRadius: 20,
-    bottom: 7,
-    left: 7,
+    bottom: hp(1),
+    left: wp(3),
   },
-  buytxt: {
+  buyTxt: {
     color: colors.white,
     alignSelf: 'center',
-    fontSize: 15,
+    fontSize: fontSize(15),
     fontWeight: '500',
-    marginVertical: '1%',
-  },
-  ourProduct_view: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    marginVertical: '5%',
   },
   ourProduct_txt: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: fontSize(20),
     fontWeight: '500',
+    marginVertical: hp(3),
+    marginHorizontal: wp(2),
   },
   productImg: {
-    width: 190,
-    height: 140,
-    marginRight: 15,
-    //
+    width: wp(50),
+    height: hp(17),
+    marginHorizontal: wp(1),
   },
   product_txt: {
     color: colors.black,
-    fontSize: 15,
+    fontSize: fontSize(15),
     fontWeight: '400',
+    marginVertical: hp(1),
+    marginHorizontal: wp(2),
   },
   productsView: {
-    // backgroundColor:'red'
-  },
-});
-
-const stylo = StyleSheet.create({
-  servicesList: {
-    backgroundColor: colors.pink,
-    borderRadius: 20,
-    width: 100,
-    height: 35,
-    justifyContent: 'space-around',
-    margin: 10,
-  },
-  servicesTxt: {
-    color: colors.white,
-    alignSelf: 'center',
-  },
-  filterView: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    backgroundColor: 'red',
-    margin: '2%',
-  },
-  filterTxt: {
-    color: colors.black,
-    fontSize: 16,
-    fontWeight: '500',
-    marginRight: '2%',
-  },
-  filterImg: {
-    marginTop: '2%',
-    height: 20,
-    width: 20,
+    marginHorizontal: wp(2),
   },
   TopSalonTxt: {
     color: colors.black,
-    fontSize: 20,
+    fontSize: fontSize(20),
+    marginLeft: wp(2),
     fontWeight: '500',
-    margin: '1%',
   },
-  flatlist: {
-    // height:'8%',
-    // backgroundColor:'skyblue'
+  swiper: {
+    height: hp(22),
+    width: wp(96),
+    marginHorizontal:wp(2),
+    borderRadius:5,
+  },
+  swiperImgView:{
+    height: hp(22),
+    width: wp(96),
+    backgroundColor:colors.black,
+    position: 'absolute',
+    borderRadius:5,
+  },
+  swiperImg: {
+    opacity:0.7,
+    height: hp(22),
+    width: wp(96),
+    position: 'absolute',
+    borderRadius:5,
+    
+  },
+
+
+  slectedServicesContainer: {
+    backgroundColor: colors.pink,
+    width: wp(30),
+    height: hp(5),
+    justifyContent: 'center',
+    borderRadius: 20,
+    marginLeft: 10,
+  },
+  unSelectedServicesContainer:{
+    backgroundColor: colors.white,
+    width: wp(30),
+    color:colors.gray,
+    height: hp(5),
+    justifyContent: 'center',
+    borderRadius: 20,
+    marginLeft: 10,
+    borderColor:colors.gray,
+    borderWidth:1,
+  },
+  selectedServicesListTxt: {
+    color: colors.white,
+    alignSelf: 'center',
+    fontSize: 15,
+    fontWeight: '400',
+  },
+  unSelectedServicesListTxt:{
+    color: colors.gray,
+    alignSelf: 'center',
+    fontSize: 15,
+    fontWeight: '400',
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    alignSelf: 'flex-end',
+  },
+  filterTxt: {
+    fontSize: fontSize(15),
+    color: colors.black,
+    fontWeight: '500',
+  },
+  filterImg: {
+    resizeMode: 'contain',
+    height: hp(3),
+  },
+  servicesView: {
+    marginHorizontal: wp(1),
+  },
+  swiperView: {
+    justifyContent: 'center',
+    marginHorizontal: wp(2),
+  },
+  homePosterImg: {
+    height: hp(40),
+    width: wp(96),
+    position: 'absolute',
+  },
+  posterTxtView: {
+    top: hp(5),
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  posterNormalTxt: {
+    color: colors.white,
+    fontSize: fontSize(20),
+    fontWeight: '500',
+  },
+  posterPR: {
+    color: colors.pink,
+    fontSize: fontSize(50),
+    fontWeight: '900',
+  },
+  flatListView: {
+    alignSelf: 'center',
+    marginHorizontal: wp(1),
+    height: hp(25),
+    // overflow:'hidden',
+  },
+  activeDotStyle: {
+    height: hp(1),
+    width: wp(2),
+    borderRadius: 6,
+    bottom: hp(-1),
+  },
+  normalDotStyle: {
+    height: hp(1),
+    width: wp(2),
+    bottom: hp(-1),
+  },
+  swiperStyle: {
+    height: hp(22),
+  },
+  salonListView: {
+    backgroundColor: colors.white,
+    height: hp(23),
+    width: wp(45),
+    justifyContent: 'space-between',
+    shadowColor:colors.black,
+    elevation: 1,
+  },
+  salonListImg: {
+    height: hp(13),
+    width: wp(45),
+    resizeMode: 'cover',
+    borderRadius:5
+  },
+
+
+
+  salonRatingView: {
+    backgroundColor: colors.pink,
+    flexDirection: 'row',
+    borderRadius: 20,
+    width: wp(13),
+    position: 'absolute',
+    paddingVertical:hp(0.2),
+    bottom: hp(11),
+    left: wp(2),
+  },
+  ratingImg: {
+    height: hp(1.5),
+    width: wp(3),
+    marginLeft: wp(2),
+  },
+  ratingTxt: {
+    color: colors.white,
+    fontSize: fontSize(11),
+    fontWeight: '500',
+    marginLeft: wp(1),
+  },
+
+
+
+  salonNameTxt: {
+    color: colors.black,
+    position: 'absolute',
+    top: hp(13.5),
+    left: wp(2),
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  salonLocationView: {
+    flexDirection: 'row',
+    bottom: hp(1),
+    left: wp(1),
+  },
+  salonLocationPin: {
+    height: hp(2),
+    width: wp(5),
+  },
+  salonLocationTxt: {
+    fontSize: fontSize(12),
+    fontWeight: '500',
+    color: colors.black,
+  },
+  servicesList: {
+    marginHorizontal: wp(-1),
+    marginVertical: hp(1),
   },
 });
 

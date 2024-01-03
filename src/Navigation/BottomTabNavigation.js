@@ -7,17 +7,13 @@ import Home from '../Screens/Home'
 import OrderBy from '../Screens/OrderBy'
 import NearBy from '../Screens/NearBy'
 import Profile from '../Screens/Profile'
-import { Images } from '../assets/images/index'
+import { Images } from '../../assets/images/index'
 import TopSalon from '../Screens/TopSalon'
 
 const Bottom = createBottomTabNavigator()
 
 const BottomTabNavigation = () => {
   return (
-    // <View>
-    //   <Text>BottomTabNavigation</Text>
-    // </View>
-
     <Bottom.Navigator screenOptions={{headerShown:false}} >
       <Bottom.Screen name='Home' component={Home} options={{
         tabBarIcon:tabInfo =>{
